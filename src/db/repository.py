@@ -1,14 +1,25 @@
 import sqlite3
 from pathlib import Path
 
-# Ensures the data folder exists
+# Ensures the data folder exists to store the database
 Path("data").mkdir(exist_ok=True)
-DB_PATH = Path("data/mothers.db")
+DB_PATH = "data/h_aibuddy.db"
 
-def create_tables():
+def init_brain():
+    """Initializes the AI's memory database"""
     conn = sqlite3.connect(DB_PATH)
-    cur = conn.cursor()
-    cur.execute("CREATE TABLE IF NOT EXISTS mothers (id INTEGER PRIMARY KEY, name TEXT, age INTEGER, skills TEXT, goals TEXT)")
-    cur.execute("CREATE TABLE IF NOT EXISTS children (id INTEGER PRIMARY KEY, mother_id INTEGER, name TEXT, age INTEGER, school_level TEXT, FOREIGN KEY (mother_id) REFERENCES mothers (id))")
+    cursor = conn.cursor()
+    
+    # Creates a table to store guardian logs
+    cursor.execute('''CREATE TABLE IF NOT EXISTS logs 
+                     (id INTEGER PRIMARY KEY, 
+                      event TEXT, 
+                      status TEXT, 
+                      timestamp DATETIME DEFAULT CURRENT_TIMESTAMP)''')
+    
     conn.commit()
     conn.close()
+    print("🤖 H-AIBuddy: My memory brain is online!")
+
+if __name__ == "__main__":
+    init_brain()
