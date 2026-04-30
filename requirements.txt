@@ -1,3 +1,1 @@
-# H-AIBuddy Core Requirements
-# These are built-in for now, but we list them for project structure
-pathlib
+streamlit
