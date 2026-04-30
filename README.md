@@ -1,8 +1,7 @@
 # 🤖 H-AIBuddy: The Intelligence Guardian
 ### *Empowering Mothers & Protecting the Next Generation*
 
-[![Streamlit App](https://streamlit.io)](https://streamlit.app)
-
+[![Streamlit App](https://h-aibuddy-wkckkssyxxk2jwsmwghkeh.streamlit.app/)
 🚀 **Live Interactive Demo:** [Talk to H-AIBuddy Here](https://streamlit.app)
 
 ---
