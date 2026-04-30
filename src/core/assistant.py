@@ -18,15 +18,23 @@ class H_AIBuddy:
             self.user_data['education'] = input("🤖 What is your level of education? ")
             self.user_data['employment'] = input("🤖 Are you employed? (yes/no) ")
             
-            child_age = input("🤖 How old is your child/children? ")
-            self.user_data['child_age'] = child_age
+            # AGE INPUT WITH SAFETY FILTER
+            child_age_input = input("🤖 How old is your child/children? ")
+            self.user_data['child_age'] = child_age_input
 
-            if int(child_age) >= 18:
+            try:
+                # This extracts the number even if you type '2 months'
+                age_numeric = int(''.join(filter(str.isdigit, child_age_input)))
+            except ValueError:
+                age_numeric = 0 
+
+            if age_numeric >= 18:
                 managed = input("🤖 Did your child manage to study? (yes/no) ")
                 if managed == "yes":
                     print("🤖 That is wonderful! Education is a powerful shield.")
                 self.check_willingness()
             else:
+                # For younger children or babies
                 self.check_willingness()
         else:
             print("🤖 I see! I am still here to guard and assist you.")
