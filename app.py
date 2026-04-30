@@ -1,64 +1,93 @@
 import streamlit as st
-import sys
-import os
+import time
+from datetime import datetime
 
-# Helps Streamlit find your folders
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '.')))
+# --- 1. AI MEMORY & TIME TRACKING INITIALIZATION ---
+if 'start_time' not in st.session_state:
+    st.session_state.start_time = time.time()
+if 'chat_memory' not in st.session_state:
+    st.session_state.chat_memory = []
+if 'connected' not in st.session_state:
+    st.session_state.connected = False
 
-# Set Page Look
-st.set_page_config(page_title="H-AIBuddy: Leadership Core", layout="wide")
+st.set_page_config(page_title="H-AIBuddy: Professional Guardian", layout="wide")
 
-# --- ROBOT HEADER ---
+# --- 2. VISUAL INTERFACE (Robot Presence) ---
 st.image("https://giphy.com", width=150)
 st.title("🤖 H-AIBuddy: Intelligence Guardian")
+st.write("---")
 
-# --- SIDEBAR: INTERVIEW ---
+# --- 3. THE ADAPTIVE INTERVIEW (Original Logic + Improvement) ---
 with st.sidebar:
-    st.header("👤 Profile Connection")
-    name = st.text_input("Name:", placeholder="Enter your name...")
+    st.header("👤 Security Connection")
+    name = st.text_input("Mother's Name:")
     is_mother = st.radio("Are you a mother?", ["Select...", "Yes", "No"])
     
     if is_mother == "Yes" and name:
-        c_age_input = st.text_input("Child's Age (e.g., 2 or 19)")
-        if st.button("Connect to Guardian"):
-            st.session_state.connected = True
-            st.balloons()
+        permission = st.checkbox("Grant H-AIBuddy permission to interview?")
+        if permission:
+            career = st.text_input("Career Status")
+            edu = st.text_input("Education Level")
+            c_age = st.number_input("Child's Age", min_value=0, max_value=100)
+            
+            if st.button("Initialize Leadership Core"):
+                st.session_state.connected = True
+                st.balloons()
 
-# --- MAIN DASHBOARD ---
-if st.session_state.get('connected'):
-    # 1. Leadership Slide (Visual Result like your image)
-    st.markdown(f"""
-    <div style="background-color:#ffffff; padding:40px; border-radius:15px; border: 2px solid #E0E0E0; box-shadow: 5px 5px 15px rgba(0,0,0,0.05);">
-        <p style="color:#4CAF50; font-weight:bold; margin-bottom:0;">💠 Leadership Core</p>
-        <h1 style="color:#1E3A8A; font-size:60px; margin-top:0;">DATA ANALYTICS</h1>
-        <h3 style="color:#FFC107;">Ethics and Bias in Data Interpretation</h3>
-        <hr>
-        <p style="font-size:20px; color:#555;"><b>Guardian Notes for {name}:</b></p>
-        <ul style="color:#555; font-size:18px;">
-            <li>Science and Physics are the foundation of future leadership.</li>
-            <li>We are currently monitoring development for child age: {c_age_input}</li>
-            <li>Subject modules available: Math, Science, English, Deutsch.</li>
-        </ul>
-    </div>
-    """, unsafe_allow_html=True)
+# --- 4. MAIN INTERACTION HUB ---
+if st.session_state.connected:
+    st.subheader(f"👋 Welcome back, {name}. How can I assist your family today?")
+    
+    # AI Conversation Area
+    user_thought = st.text_area("Talk to me (I will adapt to your needs):", placeholder="Example: I want to focus on Math and French this week...")
+    if st.button("Submit to Memory"):
+        st.session_state.chat_memory.append({"time": datetime.now().strftime("%H:%M"), "note": user_thought})
+        st.success("🤖 H-AIBuddy: Vision recorded. I am adapting our modules now.")
 
-    # 2. Age-Specific Recommendations
+    # --- 5. THE LEARNING MODULES (Math, Science, Languages) ---
     st.write("---")
-    try:
-        age = int(''.join(filter(str.isdigit, c_age_input)))
-    except:
-        age = 0
+    st.header("📚 Learning Modules")
+    
+    tab1, tab2, tab3, tab4 = st.tabs(["🌎 Languages", "🌌 Science & Physics", "🧮 Math", "💼 Entrepreneurship"])
 
-    if age < 5:
-        st.info("👶 **Early Development Plan:** I recommend starting with 'Language Play' in English and Deutsch.")
-    elif age >= 18:
-        st.warning("🎓 **Advanced Career Path:** I have prepared a Mastery Track for Science and Physics for your adult child.")
-    else:
-        st.success("📚 **Core Student Path:** Standard modules for Math and Science are ready.")
+    with tab1:
+        st.subheader("Language Specialist")
+        lang = st.selectbox("Choose a language to study:", ["English", "Deutsch", "French", "Creole"])
+        
+        if lang == "French":
+            st.image("https://unsplash.com", width=300)
+            st.markdown("**Notes:** French is the language of diplomacy. *Greeting:* 'Bonjour' (Hello).")
+        elif lang == "Creole":
+            st.image("https://unsplash.com", width=300)
+            st.markdown("**Notes:** Creole is built on phonetics and community. *Greeting:* 'Bonzour'.")
+        elif lang == "Deutsch":
+            st.markdown("**Notes:** German is the language of Engineering. *Greeting:* 'Guten Tag'.")
+            
+    with tab2:
+        st.subheader("Science & Physics")
+        st.image("https://unsplash.com", width=300)
+        st.write("- **Physics:** Study the laws of motion (Newton's Laws).")
+        st.write("- **Science:** Understanding data and evidence.")
 
-    # 3. Download Section
-    st.download_button("📥 Download This Slide as Notes", 
-                     data=f"H-AIBuddy Lesson for {name}\nChild Age: {c_age_input}\nModule: Leadership Data Analytics",
-                     file_name="H_AIBuddy_Lesson.txt")
+    with tab3:
+        st.subheader("Mathematics")
+        st.write("- **Logic:** If A = B and B = C, then A = C.")
+        st.write("- **Finance:** Managing family resources and business math.")
+
+    with tab4:
+        st.subheader("Entrepreneurship & Data")
+        st.write("- **Strategy:** Identify a problem and build a solution.")
+        st.write("- **Data:** Use analytics to track your success.")
+
+    # --- 6. ANALYTICS & DOWNLOADS (The Memory) ---
+    st.write("---")
+    st.subheader("📊 Session Analytics")
+    current_elapsed = round((time.time() - st.session_state.start_time) / 60, 2)
+    st.info(f"⏱️ You have been interacting with H-AIBuddy for **{current_elapsed} minutes**.")
+    
+    # Download Notes
+    report = f"H-AIBuddy Report for {name}\nTime Spent: {current_elapsed} mins\nNotes: {st.session_state.chat_memory}"
+    st.download_button("📥 Download Lesson Notes & Progress", data=report, file_name=f"{name}_H_AIBuddy_Notes.txt")
+
 else:
-    st.warning("Please complete your profile in the sidebar to view the Leadership Core slides.")
+    st.warning("🤖 H-AIBuddy: Please connect your profile in the sidebar to begin our journey.")
